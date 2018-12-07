@@ -17,7 +17,7 @@ sudo cp $METRICS_HOME/conf/grafana.secrets.ccf-tmpl-conf.jsonnet $ASF_HOME/conf/
 sudo cp $METRICS_HOME/conf/postgres.secrets.ccf-tmpl-conf.jsonnet $ASF_HOME/conf/postgres.secrets.ccf-conf.jsonnet
 
 title "Prepare CCF container configuration variables"
-cat conf/ccf.container.common.ansible-vars.yml  | sudo tee $ASF_HOME/conf/ccf.container.common.ansible-vars.yml > /dev/null
+cat $METRICS_HOME/conf/ccf.container.common.ansible-vars.yml  | sudo tee $ASF_HOME/conf/ccf.container.common.ansible-vars.yml > /dev/null
 
 title "Prepare CCF container Ansible Playbook"
 sudo cp $METRICS_HOME/playbook/05_ccf-containers.ansible-playbook.yml $ASF_HOME/playbooks/05_ccf-containers.ansible-playbook.yml
