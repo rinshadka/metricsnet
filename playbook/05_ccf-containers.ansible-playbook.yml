@@ -1,0 +1,74 @@
+---
+- name: Metrics Net CCF Containers
+  hosts: all
+  vars_files:
+    - ../conf/appliance.common.ansible-vars.yml
+    - ../conf/appliance.secrets.ansible-vars.yml
+    - ../conf/ccf.container.common.ansible-vars.yml
+  tasks:
+
+    - name: Create Appliance Admin User Common runtime config, Secrets and CCF container directories
+      file:
+        path: "{{ item }}"
+        state: directory
+      with_items:
+        - "{{ traefik_ccf_container_path }}"
+        - "{{ postgres_ccf_container_path }}"
+        - "{{ sql_agent_ccf_container_path }}"
+        - "{{ prometheus_sql_agent_exporter_ccf_container_path }}"
+        - "{{ prometheus_ccf_container_path }}/etc"
+        - "{{ portainer_ccf_container_path }}"
+
+    - name: Download Traefik defn file from https://github.com/shah/ccf-container-defns
+      get_url: url={{ github_url }}/traefik.ccf-defn.jsonnet dest={{ traefik_ccf_container_path }}/{{ ccf_defn_file }} force=yes
+
+    - name: Go to Traefik directory and install Traefik routing CCF Container service
+      command: chdir={{ traefik_ccf_container_path }} ccfmake start
+
+
+    - name: Download Postgres defn file from https://github.com/shah/ccf-container-defns
+      get_url: url={{ github_url }}/postgres.ccf-defn.jsonnet dest={{ postgres_ccf_container_path }}/{{ ccf_defn_file }} force=yes
+     
+    - name: Copy custom script for CCF defn configuration support
+      copy: src={{ custom_postgres_ccf_script }} dest={{ postgres_ccf_container_path }}/before_configure.make-plugin.sh mode=a+x force=yes
+
+    - name: Go to Postgres directory and install Postgres CCF Container service
+      command: chdir={{ postgres_ccf_container_path }} ccfmake start
+
+
+    - name: Download sql_agent defn file from https://github.com/shah/ccf-container-defns
+      get_url: url={{ github_url }}/sql-agent.ccf-defn.jsonnet dest={{ sql_agent_ccf_container_path }}/{{ ccf_defn_file }} force=yes
+
+    - name: Go to sql_agent directory and install sql_agent CCF Container service
+      command: chdir={{ sql_agent_ccf_container_path }} ccfmake start
+
+
+    - name: Download prometheus-sql-agent-exporter defn file from https://github.com/shah/ccf-container-defns
+      get_url: url={{ github_url }}/prometheus-sql-agent-exporter.ccf-defn.jsonnet dest={{ prometheus_sql_agent_exporter_ccf_container_path }}/{{ ccf_defn_file }} force=yes
+
+      #- name: Go to prometheus-sql-agent-exporter directory and install prometheus-sql-agent-exporter CCF Container service
+      #  command: chdir={{ prometheus_sql_agent_exporter_ccf_container_path }} ccfmake start
+
+
+    - name: Download prometheus defn file from https://github.com/shah/ccf-container-defns
+      get_url: url={{ github_url }}/prometheus.ccf-defn.jsonnet dest={{ prometheus_ccf_container_path }}/{{ ccf_defn_file }} force=yes
+
+    - name: Go to prometheus directory and install prometheus CCF Container service
+      command: chdir={{ prometheus_ccf_container_path }} ccfmake start
+
+
+    - name: Download portainer defn file from https://github.com/shah/ccf-container-defns
+      get_url: url={{ github_url }}/portainer.ccf-defn.jsonnet dest={{ portainer_ccf_container_path }}/{{ ccf_defn_file }} force=yes
+
+    - name: Go to portainer directory and install portainer CCF Container service
+      command: chdir={{ portainer_ccf_container_path }} ccfmake start
+    
+    
+    - name: Download grafana files from https://github.com/shah/ccf-container-grafana
+      git: name=https://github.com/shah/ccf-container-grafana.git dest={{ grafana_ccf_container_path }} force=yes
+    
+    - name: Copy custom script for CCF defn configuration support
+      copy: src={{ custom_grafana_ccf_script }} dest={{ grafana_ccf_container_path }}/before_configure.make-plugin.sh mode=a+x force=yes
+
+    - name: Go to grafana directory and install grafana CCF Container service
+      command: chdir={{ grafana_ccf_container_path }} ccfmake start

@@ -1,0 +1,11 @@
+github_url: "https://raw.githubusercontent.com/shah/ccf-container-defns/master"
+ccf_defn_file: container.ccf-defn.jsonnet
+traefik_ccf_container_path: /opt/metricsnet-ccf-containers/traefik
+postgres_ccf_container_path: /opt/metricsnet-ccf-containers/postgres
+prometheus_ccf_container_path: /opt/metricsnet-ccf-containers/prometheus
+grafana_ccf_container_path: /opt/metricsnet-ccf-containers/grafana
+sql_agent_ccf_container_path: /opt/metricsnet-ccf-containers/sql-agent
+prometheus_sql_agent_exporter_ccf_container_path: /opt/metricsnet-ccf-containers/prometheus-sql-agent-exporter
+portainer_ccf_container_path: /opt/metricsnet-ccf-containers/portainer
+custom_postgres_ccf_script: /etc/metrics/scripts/postgres/before_configure.make-plugin.sh
+custom_grafana_ccf_script: /etc/metrics/scripts/grafana/before_configure.make-plugin.sh
