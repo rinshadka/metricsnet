@@ -1,5 +1,6 @@
 # Run bootstrap
 sudo apt update && sudo apt install net-tools curl -y
+
 sudo curl https://raw.githubusercontent.com/rinshadka/metricsnet/master/bootstrap.sh | bash
 
 After bootstrap.sh is complete, exit the shell.
