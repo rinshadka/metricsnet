@@ -29,8 +29,9 @@ After bootstrap.sh is complete, exit the shell.
 
 # Setup temporary firewall rule for access from docker network:
 
-sudo ufw allow in on `echo br-$(docker network ls -f name=appliance | awk '{if (NR!=1) {print}}' | awk '{print $1}')` to any port 9100
-sudo ufw allow in on `echo br-$(docker network ls -f name=appliance | awk '{if (NR!=1) {print}}' | awk '{print $1}')` to any port 8010
+`sudo ufw allow in on `echo br-$(docker network ls -f name=appliance | awk '{if (NR!=1) {print}}' | awk '{print $1}')` to any port 9100`
+
+`sudo ufw allow in on `echo br-$(docker network ls -f name=appliance | awk '{if (NR!=1) {print}}' | awk '{print $1}')` to any port 8010`
 
 # After setup is completed, reboot the server:
 
